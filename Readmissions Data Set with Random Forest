@@ -1,0 +1,478 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.preprocessing import LabelEncoder\n",
+    "from sklearn.impute import SimpleImputer\n",
+    "from sklearn.linear_model import LogisticRegression\n",
+    "from sklearn.preprocessing import StandardScaler\n",
+    "from sklearn.ensemble import RandomForestClassifier\n",
+    "from sklearn.cluster import KMeans\n",
+    "import matplotlib.pyplot as plt\n",
+    "from sklearn.metrics import precision_recall_curve, precision_score, recall_score, f1_score\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "file_path = r'C:\\Users\\gusgl\\OneDrive\\Desktop\\Project 2\\diabetic_data.csv'\n",
+    "data = pd.read_csv(file_path)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "encounter_id                 int64\n",
+      "patient_nbr                  int64\n",
+      "race                         int32\n",
+      "gender                       int32\n",
+      "age                          int32\n",
+      "weight                      object\n",
+      "admission_type_id            int64\n",
+      "discharge_disposition_id     int64\n",
+      "admission_source_id          int64\n",
+      "time_in_hospital             int64\n",
+      "payer_code                  object\n",
+      "medical_specialty           object\n",
+      "num_lab_procedures           int64\n",
+      "num_procedures               int64\n",
+      "num_medications              int64\n",
+      "number_outpatient            int64\n",
+      "number_emergency             int64\n",
+      "number_inpatient             int64\n",
+      "diag_1                      object\n",
+      "diag_2                      object\n",
+      "diag_3                      object\n",
+      "number_diagnoses             int64\n",
+      "max_glu_serum               object\n",
+      "A1Cresult                   object\n",
+      "metformin                   object\n",
+      "repaglinide                 object\n",
+      "nateglinide                 object\n",
+      "chlorpropamide              object\n",
+      "glimepiride                 object\n",
+      "acetohexamide               object\n",
+      "glipizide                   object\n",
+      "glyburide                   object\n",
+      "tolbutamide                 object\n",
+      "pioglitazone                object\n",
+      "rosiglitazone               object\n",
+      "acarbose                    object\n",
+      "miglitol                    object\n",
+      "troglitazone                object\n",
+      "tolazamide                  object\n",
+      "examide                     object\n",
+      "citoglipton                 object\n",
+      "insulin                     object\n",
+      "glyburide-metformin         object\n",
+      "glipizide-metformin         object\n",
+      "glimepiride-pioglitazone    object\n",
+      "metformin-rosiglitazone     object\n",
+      "metformin-pioglitazone      object\n",
+      "change                      object\n",
+      "diabetesMed                 object\n",
+      "readmitted                  object\n",
+      "dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "# List of columns to encode\n",
+    "categorical_columns = ['age', 'race', 'gender'] \n",
+    "\n",
+    "# Initializing LabelEncoder\n",
+    "label_encoder = LabelEncoder()\n",
+    "\n",
+    "# Applying LabelEncoder to all categorical columns\n",
+    "for col in categorical_columns:\n",
+    "    data[col] = label_encoder.fit_transform(data[col])\n",
+    "\n",
+    "# Checking to ensure all columns are numeric\n",
+    "print(data.dtypes)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Categorical columns to encode\n",
+    "categorical_columns = ['race', 'gender', 'change', 'diabetesMed', 'readmitted']\n",
+    "\n",
+    "# Initialize LabelEncoder\n",
+    "label_encoder = LabelEncoder()\n",
+    "\n",
+    "# Applying LabelEncoder\n",
+    "for col in categorical_columns:\n",
+    "    data[col] = label_encoder.fit_transform(data[col])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Converting columns that are supposed to be numeric\n",
+    "numeric_columns = ['weight', 'diag_1', 'diag_2', 'diag_3', 'max_glu_serum', 'A1Cresult']\n",
+    "\n",
+    "for col in numeric_columns:\n",
+    "    data[col] = pd.to_numeric(data[col], errors='coerce')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# One-hot encode remaining object columns\n",
+    "data = pd.get_dummies(data, drop_first=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "encounter_id                       int64\n",
+      "patient_nbr                        int64\n",
+      "race                               int64\n",
+      "gender                             int64\n",
+      "age                                int32\n",
+      "                                   ...  \n",
+      "glyburide-metformin_Up              bool\n",
+      "glipizide-metformin_Steady          bool\n",
+      "glimepiride-pioglitazone_Steady     bool\n",
+      "metformin-rosiglitazone_Steady      bool\n",
+      "metformin-pioglitazone_Steady       bool\n",
+      "Length: 162, dtype: object\n",
+      "Non-numeric columns: Index([], dtype='object')\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Checking the data types of all columns\n",
+    "print(data.dtypes)\n",
+    "\n",
+    "# Checking if there are any remaining non-numeric columns\n",
+    "non_numeric_columns = data.select_dtypes(include=['object']).columns\n",
+    "print(\"Non-numeric columns:\", non_numeric_columns)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "c:\\Users\\gusgl\\anaconda\\envs\\dev\\lib\\site-packages\\sklearn\\utils\\extmath.py:1137: RuntimeWarning: invalid value encountered in divide\n",
+      "  updated_mean = (last_sum + new_sum) / updated_sample_count\n",
+      "c:\\Users\\gusgl\\anaconda\\envs\\dev\\lib\\site-packages\\sklearn\\utils\\extmath.py:1142: RuntimeWarning: invalid value encountered in divide\n",
+      "  T = new_sum / new_sample_count\n",
+      "c:\\Users\\gusgl\\anaconda\\envs\\dev\\lib\\site-packages\\sklearn\\utils\\extmath.py:1162: RuntimeWarning: invalid value encountered in divide\n",
+      "  new_unnormalized_variance -= correction**2 / new_sample_count\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Initializing the scaler\n",
+    "scaler = StandardScaler()\n",
+    "\n",
+    "# Fit and transform the data (excluding the target variable if applicable)\n",
+    "X = data.drop('readmitted', axis=1)\n",
+    "X_scaled = scaler.fit_transform(X)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Accuracy: 0.5946742655006387\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 'readmitted' is the target variable\n",
+    "X = data.drop('readmitted', axis=1)\n",
+    "y = data['readmitted']\n",
+    "\n",
+    "# Splitting the data\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n",
+    "\n",
+    "# Initializing and training Random Forest model\n",
+    "model = RandomForestClassifier(random_state=42)\n",
+    "model.fit(X_train, y_train)\n",
+    "\n",
+    "# Predict and evaluate\n",
+    "y_pred = model.predict(X_test)\n",
+    "print(\"Accuracy:\", accuracy_score(y_test, y_pred))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "                           Feature    Importance\n",
+      "1                      patient_nbr  8.009996e-02\n",
+      "0                     encounter_id  7.998352e-02\n",
+      "10              num_lab_procedures  6.374845e-02\n",
+      "17                          diag_2  6.351851e-02\n",
+      "18                          diag_3  6.345532e-02\n",
+      "..                             ...           ...\n",
+      "87    medical_specialty_Proctology  1.379107e-07\n",
+      "83  medical_specialty_Perinatology  0.000000e+00\n",
+      "21                       A1Cresult  0.000000e+00\n",
+      "20                   max_glu_serum  0.000000e+00\n",
+      "5                           weight  0.000000e+00\n",
+      "\n",
+      "[161 rows x 2 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Checking the importance of columns\n",
+    "importances = model.feature_importances_\n",
+    "feature_names = X.columns\n",
+    "feature_importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': importances})\n",
+    "print(feature_importance_df.sort_values(by='Importance', ascending=False))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Drop Patient number and encounter id\n",
+    "X = X.drop(columns=['patient_nbr', 'encounter_id'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Drop low-importance features\n",
+    "low_importance_features = feature_importance_df[feature_importance_df['Importance'] < 1e-5]['Feature']\n",
+    "X = X.drop(columns=low_importance_features)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[2 1 0]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(y.unique())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[1 0]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Remapping all readmissions to 1\n",
+    "y = y.map({0: 0, 1: 1, 2: 1}) \n",
+    "\n",
+    "# Verifying the remapping\n",
+    "print(y.unique())  # Should show only [0, 1]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Accuracy: 0.89\n",
+      "ROC-AUC Score: 0.64\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Splitting the data again\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n",
+    "\n",
+    "# Re-training the Random Forest model\n",
+    "rf_model = RandomForestClassifier(class_weight='balanced',random_state=42)\n",
+    "rf_model.fit(X_train, y_train)\n",
+    "\n",
+    "# Predict and evaluate\n",
+    "y_pred = model.predict(X_test)\n",
+    "y_prob = model.predict_proba(X_test)[:, 1]\n",
+    "\n",
+    "accuracy = accuracy_score(y_test, y_pred)\n",
+    "roc_auc = roc_auc_score(y_test, y_prob)\n",
+    "\n",
+    "print(f'Accuracy: {accuracy:.2f}')\n",
+    "print(f'ROC-AUC Score: {roc_auc:.2f}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Precision: 0.8879823052347015\n",
+      "Recall: 0.9998339697825004\n",
+      "F1 Score: 0.9405945748945697\n",
+      "ROC-AUC Score: 0.640967538367694\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Calculating metrics\n",
+    "print(\"Precision:\", precision_score(y_test, y_pred))\n",
+    "print(\"Recall:\", recall_score(y_test, y_pred))\n",
+    "print(\"F1 Score:\", f1_score(y_test, y_pred))\n",
+    "print(\"ROC-AUC Score:\", roc_auc_score(y_test, rf_model.predict_proba(X_test)[:, 1]))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Accuracy Score: 0.8878844453178736\n",
+      "New Precision: 0.9155515496082646\n",
+      "New Recall: 0.7308096740273397\n",
+      "New F1 Score: 0.8128154622676351\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Adjusting the decision threshold for the positive class\n",
+    "precision, recall, thresholds = precision_recall_curve(y_test, y_prob)\n",
+    "\n",
+    "# Identifying thresholds where recall is within a desired range\n",
+    "desired_recall_min = 0.5\n",
+    "desired_recall_max = 0.9\n",
+    "\n",
+    "# Filtering for thresholds that fall within the desired recall range\n",
+    "valid_indices = (recall[:-1] >= desired_recall_min) & (recall[:-1] <= desired_recall_max)\n",
+    "optimal_thresholds = thresholds[valid_indices]\n",
+    "\n",
+    "# Selecting the average threshold in the desired range\n",
+    "if len(optimal_thresholds) > 0:\n",
+    "    optimal_threshold = optimal_thresholds.mean()\n",
+    "else:\n",
+    "    optimal_threshold = 0.5 \n",
+    "\n",
+    "# Applying the optimal threshold to the predicted probabilities\n",
+    "y_pred_optimal = (y_prob >= optimal_threshold).astype(int)\n",
+    "\n",
+    "# Evaluating the new threshold\n",
+    "new_precision = precision_score(y_test, y_pred_optimal)\n",
+    "new_recall = recall_score(y_test, y_pred_optimal)\n",
+    "new_f1 = f1_score(y_test, y_pred_optimal)\n",
+    "\n",
+    "print(\"Accuracy Score:\", accuracy)\n",
+    "print(\"New Precision:\", new_precision)\n",
+    "print(\"New Recall:\", new_recall)\n",
+    "print(\"New F1 Score:\", new_f1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "New ROC-AUC Score: 0.64\n"
+     ]
+    }
+   ],
+   "source": [
+    "roc_auc_new = roc_auc_score(y_test, y_prob)\n",
+    "print(f\"New ROC-AUC Score: {roc_auc_new:.2f}\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "dev",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.14"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
