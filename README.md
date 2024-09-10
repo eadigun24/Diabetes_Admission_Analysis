@@ -185,13 +185,11 @@ Dataset 2, model 1, Gustav van der Westhuizen
 # Conclusions and Future Development  
 
 
-**The results and conclusions of the analysis:**
+**The results and conclusions of the analysis:**  
 This model can be used to further highlight the reasons why diabetic patients are readmitted, and work towards preventing it from happening. Not only can it help target at-risk patients within the hospital, but its predictive nature can be utilized to streamline the care process and alleviate bottlenecks with resources and staff before they happen. 
 
 
-**Plan for future development**
-
-
+**Plan for future development:**  
 These models can be applied to the Initiate Triage charting system when patients are Triaged in the Emergency Department. This model would then generate automatic predictions on all incoming patiences.  For the patients that are at risk of diabetes and readmittance, their charts and be flagged for follow up once the attending physician has been assigned. 
 If it is determined that the patient is at risk, the attending can prescribe mitigating treatment specifically targeted to that patient's need. This treatment could include a social worker, diabetic educator, registered dietitian, pharmacist and case management. 
 
