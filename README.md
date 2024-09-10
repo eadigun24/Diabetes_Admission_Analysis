@@ -1,10 +1,10 @@
 # Diabetes_Admission_Analysis
  
 Overview:  
-The goal of our project was to build a model that determined the readmission rates of diabetic patients. We used two datasets; one was based on 30-day readmission rates of diabetic patients, and the other on diabetic health indicators. As a group, we applied our knowledge of supervised and unsupervised machine learning algorithms to build a model using Python.  
-The intended audience is the Board of Directors at a 100 bed hospital. The Board has requested each hospital department to develop an internal plan to help with their CMS ranking (Centers for Medicare and Medicaid Services ranking). In addition, the CMS ranking is used to guarantee insurance services for patients at that location. If this ranking drops, the insurance company will no longer accept patient claims from the hospital.  
+&emsp;The goal of our project was to build a model that determined the readmission rates of diabetic patients. We used two datasets; one was based on 30-day readmission rates of diabetic patients, and the other on diabetic health indicators. As a group, we applied our knowledge of supervised and unsupervised machine learning algorithms to build a model using Python.  
+&emsp;The intended audience is the Board of Directors at a 100 bed hospital. The Board has requested each hospital department to develop an internal plan to help with their CMS ranking (Centers for Medicare and Medicaid Services ranking). In addition, the CMS ranking is used to guarantee insurance services for patients at that location. If this ranking drops, the insurance company will no longer accept patient claims from the hospital.  
 The diabetic population was selected as our focus group since this population is statistically more at risk of hospital mortality, and increased length of hospital stay. Patients with diabetes have delayed wound healing and an increased probability of infection (Jang, Kim, Kang, Heo, Kim, & Park, 2024). Thus, it is important to keep this population as stable as possible, and decrease their chances of preventable rehospitalization. Therefore, we wanted to develop a model that would be able to predict readmission rates when diabetic patients enter the ER.  
-We designed our proposed model with the intention of taking all the Triage data from incoming Emergency Department patients. Our model would screen these incoming patients regardless of their reason for admission. Our model aims to add preventative care measures to pre-diabetic patients that may not be aware of their compromised state. This would help patient placement services determine room availability in the hospital, as well as applying individualized care plans for these patients to prevent further readmission. This model can be used to further highlight the reasons why diabetic patients are readmitted, and work towards preventing it from happening. In conjunction, understanding readmission rates can help alleviate additional stresses to the healthcare team. Reducing preventable hospitalization, reduces the amount of patients that are hospitalized. Thus, it would create a potential environment with safer staffing ratios, better patient experience and more timely care (McHuge, Berez, Small, 2013). Which would in turn, increase the CMS ranking.  
+&emsp;We designed our proposed model with the intention of taking all the Triage data from incoming Emergency Department patients. Our model would screen these incoming patients regardless of their reason for admission. Our model aims to add preventative care measures to pre-diabetic patients that may not be aware of their compromised state. This would help patient placement services determine room availability in the hospital, as well as applying individualized care plans for these patients to prevent further readmission. This model can be used to further highlight the reasons why diabetic patients are readmitted, and work towards preventing it from happening. In conjunction, understanding readmission rates can help alleviate additional stresses to the healthcare team. Reducing preventable hospitalization, reduces the amount of patients that are hospitalized. Thus, it would create a potential environment with safer staffing ratios, better patient experience and more timely care (McHuge, Berez, Small, 2013). Which would in turn, increase the CMS ranking.  
   
 # Diabetes_Admission_Analysis
 
@@ -58,7 +58,7 @@ DiffWalk
 Sex → (0 = female, 1 = male)
 
 
---- Integer Elements ---
+--- Integer Elements ---  
 BMI - 12-98  
 GenHlth (Self reported value)  
 1 = excellent  
@@ -70,10 +70,7 @@ MentHlth - Mental Health in the last 30 days
 PhysHlth - Physical Health in the last 30 days  
 
 
-Age [1-13] - (filled in using CDC Master List, grouping 18-19, 20-24) [* indicated field given with original data]
-
-
-       Age Group    |    Range
+Age [1-13] - (filled in using CDC Master List, grouping 18-19, 20-24) [* indicated field given with original data]  
 1   = 18-24  
 2  =  25-29  
 3  =  30-34  
@@ -85,24 +82,20 @@ Age [1-13] - (filled in using CDC Master List, grouping 18-19, 20-24) [* indicat
 9  = 60-64  
 10 = 65-69  
 11 = 70-74  
-12 = 75-79 
+12 = 75-79  
 13 =  80 or older  
   
- 
-			Fig 1: Age Groupings and Ranked by Percentage 
-
-
-Education [1-6]
- 1 = Never attended school or only kindergarten  
+Education [1-6]  
+&emsp;1 = Never attended school or only kindergarten  
  2 = Grades 1 through 8 (Elementary)  
  3 = Grades 9 through 11 (Some high school)  
  4 = Grade 12 or GED (High school graduate)  
  5 = College 1 year to 3 years (Some college or technical school)  
  6 = College 4 years or more (College graduate)  
 Income [1-8]  
-1 = less than 10,000  
-5 = less than 35,000  
-8 = $75,000 or more  
+&emsp;1 = less than 10,000  
+&emsp;5 = less than 35,000  
+&emsp;8 = $75,000 or more  
 
 
 Key features of Diabetes 130-US for years 1999-2008  
@@ -158,19 +151,12 @@ Change - change in diabetic medication prescribed
 Diabetes medication - indicates there was diabetic medication prescribed  
 Readmitted (Target column)  
 
-
-
-
-
-				Figure 2: Heatmap Displaying Diabetic Health Indicators Data
-
-
-Data Import and Preparation:
-Import:
+Data Import and Preparation:  
+Import:  
 The data from the datasets were uploaded as CSV files. These datasets were manipulated by each group member using various supervised models to build a model with the highest accuracy rate. 
 
 
-Preparation: 
+Preparation:   
 The dataset CDC Diabetes Health Indicators was imported in three reversions. The first one was a raw dataset containing all the original information about diabetic patients. The second was clearned into a binary state, and the third was normalized into a 50/50 population for training purposes. Diabetes 130-US for years 1999-2008 data was imported in two datasets. The first dataset contained all the raw data, and the second dataset contained the IDS mapping codes. These mapping codes were not used in our model. A significant amount of diagnostic and medication columns were dropped. These columns were dropped since the information is not needed for prediction and would contaminate the model. 
 
 
@@ -181,23 +167,19 @@ It was found through analyzing the data, that all the models approached the same
 
 
 
-Dataset 1, Model 1, Augustine Ojo
-Append link here
-Append link here
+Dataset 1, Model 1, Augustine Ojo  
+![alt text](NN_data-Augustine.png "Dataset 1")
 
 
-Dataset 1, Model 2, Nathan Bauer
-Append link here
-Append link here
+Dataset 1, Model 2, Nathan Bauer  
+![alt text](NN_data-Bauer.png "Dataset 1")
 
 
 
 Similarly, for the second data set...
 
-
-Dataset 2, model 1, Gustav van der Westhuizen
-Append link here
-Append link here
+Dataset 2, model 1, Gustav van der Westhuizen  
+![alt text](NN_data-Gustav.png "Dataset 1")
 
 
 #Conclusions and Future Development 
