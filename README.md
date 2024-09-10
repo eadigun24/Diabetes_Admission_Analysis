@@ -198,7 +198,7 @@ If it is determined that the patient is at risk, the attending can prescribe mit
 
 
 
-Reference:
-Jang, S.A., Kim, K.M., Kang, H.J., Heo, S.J., Kim, C.S., & Park, S.W. (2024). Higher mortality and longer length of stay in hospitalized patients with newly diagnosed diabetes. Diabetes Research and Clinical Practice, 201, https://doi.org/10.1016/j.diabres.2024.111601
-McHuge, M.D., Berez, J., Small, D.S (2013). Hospitals With Higher Nurse Staffing Had Lower Odds Of Readmissions Penalties Than Hospitals With Lower Staffing. Health Affairs, 32, 1740-1747.
+Reference:  
+Jang, S.A., Kim, K.M., Kang, H.J., Heo, S.J., Kim, C.S., & Park, S.W. (2024). Higher mortality and longer length of stay in hospitalized patients with newly diagnosed diabetes. Diabetes Research and Clinical Practice, 201, https://doi.org/10.1016/j.diabres.2024.111601  
+McHuge, M.D., Berez, J., Small, D.S (2013). Hospitals With Higher Nurse Staffing Had Lower Odds Of Readmissions Penalties Than Hospitals With Lower Staffing. Health Affairs, 32, 1740-1747.  
 
